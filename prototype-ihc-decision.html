@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prototype: Midnight Bites Decision</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: Georgia, serif;
+      background-color: #f6f1e9;
+      color: #2e2a26;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .screen {
+      background-color: #fffdf9;
+      max-width: 540px;
+      width: 100%;
+      padding: 50px 40px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(46, 42, 38, 0.08);
+    }
+
+    .screen.hidden { display: none; }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: normal;
+      margin-bottom: 20px;
+      color: #1f2a44;
+    }
+
+    p { line-height: 1.55; margin-bottom: 16px; color: #4a453e; text-align: left; }
+
+    button {
+      font-family: Georgia, serif;
+      font-size: 0.95rem;
+      background-color: #1f2a44;
+      color: #f6f1e9;
+      border: none;
+      padding: 14px 18px;
+      margin: 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+      max-width: 220px;
+    }
+
+    button:hover { background-color: #d4a24e; color: #1f2a44; }
+
+    .choices { display: flex; justify-content: center; flex-wrap: wrap; }
+
+    .reveal {
+      background-color: #f6f1e9;
+      padding: 18px;
+      border-radius: 6px;
+      margin-top: 8px;
+      text-align: left;
+      font-size: 0.95rem;
+      border-left: 3px solid #d4a24e;
+    }
+
+    .why { color: #7a7266; font-size: 0.85rem; margin-top: 10px; font-style: italic; }
+  </style>
+</head>
+<body>
+
+  <!-- SCREEN 1: Entry/Intro -->
+  <div class="screen" id="entry">
+    <h1>Campus Leadership — IHC Engagement Chair</h1>
+    <p>Midnight Breakfast was our free late-night food event before finals week, up to 200 meal vouchers, raffles, activities to keep students there overnight. Over the years, attendance dropped, and it got too expensive for us and Dining, since only voucher-holders were really buying food, and even then we weren't selling out.</p>
+    <p>A new dining hall opened nearby with popular chain fast food spots, drawing students away.</p>
+    <p>Myself and two others had to decide what to do about it.</p>
+    <button onclick="showScreen('decision')">Start</button>
+  </div>
+
+  <!-- SCREEN 2: Decision (the mechanic) -->
+  <div class="screen hidden" id="decision">
+    <h1>What would you do?</h1>
+    <p>Attendance is low, costs are high, and a flashier dining option just opened nearby. What's your move?</p>
+    <div class="choices">
+      <button onclick="showReflection('same')">Keep it the same, promote harder</button>
+      <button onclick="showReflection('venue')">Move venues, keep the same format</button>
+      <button onclick="showReflection('redesign')">Move venues and redesign the whole event</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: Reflection -->
+  <div class="screen hidden" id="reflection">
+    <h1>Here's what actually happened:</h1>
+    <div class="reveal">
+      <p id="reflection-text"></p>
+      <p>We first moved the event from the main dining hall (Vista Grande) to the new dining hall (1901) in December 2024, keeping the same format and renaming it Breakfast Bites. It was shared with Dining very late, planning was chaotic, and the day itself was already packed with competing events. Turnout stayed low.</p>
+      <p>So we redesigned the whole thing: added crafts, trivia, and larger giveaways (like iPads), and switched to a buffet-style model Dining paid for, so students could eat without spending down their dining dollars, unlike the old $14-15 midnight breakfast, which most students couldn't really afford by that point in the term. We renamed it again, to what we now run as Late Nite Bites.</p>
+      <p class="why">The first fix (just changing venue) treated it as a location problem. The real problem was the format and cost itself, so the second, bigger change is what actually stuck.</p>
+    </div>
+    <button onclick="showScreen('entry')" style="margin-top: 16px;">Start over</button>
+  </div>
+
+  <script>
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function showReflection(choice) {
+      const text = document.getElementById('reflection-text');
+
+      if (choice === 'same') {
+        text.textContent = "You picked 'keep it the same, promote harder' — that's close to what we tried first, in spirit: assuming the issue was awareness, not the event itself. It didn't fix the underlying problem.";
+      } else if (choice === 'venue') {
+        text.textContent = "You picked 'move venues, keep the same format' — that's exactly what we tried first.";
+      } else {
+        text.textContent = "You picked 'move venues and redesign the whole event' — that's closer to where we eventually landed, but only after the first, smaller fix didn't work.";
+      }
+
+      showScreen('reflection');
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+/* Reset default browser spacing */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Georgia, serif;
+  background-color: #f6f1e9;
+  color: #2e2a26;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 60px 20px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ---------- Hub page ---------- */
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  font-weight: normal;
+  color: #1f2a44;
+}
+
+header p {
+  font-size: 1.1rem;
+  color: #7a7266;
+  margin-top: 8px;
+}
+
+main {
+  background-color: #fffdf9;
+  padding: 60px;
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 2px 12px rgba(46, 42, 38, 0.08);
+}
+
+.zone {
+  background-color: #eee7db;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.zone:hover {
+  background-color: #1f2a44;
+}
+
+.zone:hover h2 {
+  color: #f6f1e9;
+}
+
+.zone h2 {
+  font-size: 1.2rem;
+  font-weight: normal;
+  color: #1f2a44;
+  transition: color 0.15s ease;
+}
+
+/* ---------- Zone pages (decision-flow screens) ---------- */
+
+.back-link {
+  align-self: flex-start;
+  max-width: 540px;
+  width: 100%;
+  margin: 0 auto 16px auto;
+  font-size: 0.9rem;
+  color: #7a7266;
+}
+
+.back-link:hover {
+  color: #1f2a44;
+}
+
+.screen {
+  background-color: #fffdf9;
+  max-width: 540px;
+  width: 100%;
+  padding: 50px 40px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(46, 42, 38, 0.08);
+}
+
+.screen.hidden {
+  display: none;
+}
+
+.screen h1 {
+  font-size: 1.4rem;
+  font-weight: normal;
+  margin-bottom: 20px;
+  color: #1f2a44;
+}
+
+.screen p {
+  line-height: 1.55;
+  margin-bottom: 16px;
+  color: #4a453e;
+  text-align: left;
+}
+
+button {
+  font-family: Georgia, serif;
+  font-size: 0.95rem;
+  background-color: #1f2a44;
+  color: #f6f1e9;
+  border: none;
+  padding: 14px 18px;
+  margin: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  max-width: 220px;
+}
+
+button:hover {
+  background-color: #d4a24e;
+  color: #1f2a44;
+}
+
+.choices {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.reveal {
+  background-color: #f6f1e9;
+  padding: 18px;
+  border-radius: 6px;
+  margin-top: 8px;
+  text-align: left;
+  font-size: 0.95rem;
+  border-left: 3px solid #d4a24e;
+}
+
+.why {
+  color: #7a7266;
+  font-size: 0.85rem;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+/* ---------- Simple placeholder zone pages ---------- */
+
+.placeholder {
+  background-color: #fffdf9;
+  max-width: 540px;
+  width: 100%;
+  padding: 60px 40px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(46, 42, 38, 0.08);
+}
+
+.placeholder h1 {
+  font-weight: normal;
+  color: #1f2a44;
+  margin-bottom: 12px;
+}
+
+.placeholder p {
+  color: #7a7266;
+  margin-bottom: 20px;
+}

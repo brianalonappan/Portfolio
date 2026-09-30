@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Leadership — Bri Lonappan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <a class="back-link" href="index.html">&larr; Back to Hub</a>
+
+  <!-- SCREEN 1: Entry/Intro -->
+  <div class="screen" id="entry">
+    <h1>Campus Leadership — IHC Engagement Chair</h1>
+    <p>Midnight Bites was our free late-night food event before finals week, up to 200 meal vouchers, raffles, activities to keep students there overnight. Over the years, attendance dropped, and it got too expensive for us and Dining, since only voucher-holders were really buying food, and even then we weren't selling out.</p>
+    <p>A new dining hall opened nearby with popular chain fast food spots, drawing students away.</p>
+    <p>Myself and two others had to decide what to do about it.</p>
+    <button onclick="showScreen('decision')">Start</button>
+  </div>
+
+  <!-- SCREEN 2: Decision (the mechanic) -->
+  <div class="screen hidden" id="decision">
+    <h1>What would you do?</h1>
+    <p>Attendance is low, costs are high, and a flashier dining option just opened nearby. What's your move?</p>
+    <div class="choices">
+      <button onclick="tryChoice('same')">Keep it the same, promote harder</button>
+      <button onclick="tryChoice('venue')">Move venues, keep the same format</button>
+      <button onclick="tryChoice('redesign')">Move venues and redesign the whole event</button>
+    </div>
+    <p id="hint" class="why" style="display:none; margin-top: 16px;"></p>
+  </div>
+
+  <!-- SCREEN 3: Reflection -->
+  <div class="screen hidden" id="reflection">
+    <h1>Here's what actually happened:</h1>
+    <div class="reveal">
+      <p>We first moved the event from the main dining hall (Vista Grande) to the new dining hall (1901) in December 2024, keeping the same format and renaming it Breakfast Bites. It was shared with Dining very late, planning was chaotic, and the day itself was already packed with competing events. Turnout stayed low.</p>
+      <p>So we redesigned the whole thing: added crafts, trivia, and larger giveaways (like iPads), and switched to a buffet-style model Dining paid for, so students could eat without spending down their dining dollars, unlike the old $14-15 midnight breakfast, which most students couldn't really afford by that point in the term. We renamed it again, to what we now run as Late Nite Bites.</p>
+      <p class="why">The first fix (just changing venue) treated it as a location problem. The real problem was the format and cost itself, so the second, bigger change is what actually stuck.</p>
+    </div>
+    <button onclick="resetAndShow('entry')" style="margin-top: 16px;">Start over</button>
+  </div>
+
+  <script>
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    // Resets the hint text before switching screens, so it doesn't
+    // linger if the user starts over and comes back through.
+    function resetAndShow(id) {
+      document.getElementById('hint').style.display = 'none';
+      showScreen(id);
+    }
+
+    // Called every time the user picks a choice on the Decision screen.
+    // "redesign" is the real final answer, so it's the only one that
+    // advances to the Reflection screen. The other two show a hint
+    // and let the user try again.
+    function tryChoice(choice) {
+      const hint = document.getElementById('hint');
+
+      if (choice === 'redesign') {
+        showScreen('reflection');
+        return;
+      }
+
+      if (choice === 'same') {
+        hint.textContent = "That's worth considering, but the real problem went deeper than awareness. Think about what was actually driving people away, then try again.";
+      } else if (choice === 'venue') {
+        hint.textContent = "That's actually what we tried first. It helped a little, but attendance stayed low. Something about the event itself still needed to change. Try again?";
+      }
+
+      hint.style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>
