@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Member Landing Page — Bri Lonappan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <a class="back-link" href="internship-externship.html">&larr; Back to DRC</a>
+
+  <!-- SCREEN 1: Entry/Intro -->
+  <div class="screen" id="entry">
+    <h1>Member Landing Page</h1>
+    <p>I manage the DRC Member Landing Page (MLP), where opportunities (grants, auditions, calls for submissions) are listed in chronological order by deadline, within each section.</p>
+    <p>Opportunities expire constantly. The question is what happens to a listing the moment its deadline passes.</p>
+    <button onclick="showScreen('decision')">Start</button>
+  </div>
+
+  <!-- SCREEN 2: Decision (the mechanic) -->
+  <div class="screen hidden" id="decision">
+    <h1>What would you do?</h1>
+    <p>An opportunity's deadline passes overnight. It's still sitting in its chronological spot on the page. What's the move?</p>
+    <div class="choices">
+      <button onclick="tryChoice('delete')">Delete it immediately</button>
+      <button onclick="tryChoice('leave')">Leave it exactly where it is</button>
+      <button onclick="tryChoice('note')">Move it to the bottom with a standard "expired" note</button>
+    </div>
+    <p id="hint" class="why" style="display:none; margin-top: 16px;"></p>
+  </div>
+
+  <!-- SCREEN 3: Reflection -->
+  <div class="screen hidden" id="reflection">
+    <h1>Here's what I actually did:</h1>
+    <div class="reveal">
+      <p>Expired opportunities get moved to the bottom of their section with a standard note instead of being deleted outright. The chronological order by deadline governs everything above that line, so what's still open always reads cleanest-first.</p>
+      <p>Deleting it would erase the record entirely, and members sometimes come back to a listing to double check a deadline they remember seeing, or to find contact info for next time it opens. Leaving it in its original spot would bury live opportunities under dead ones and break the whole point of sorting by deadline.</p>
+      <p class="why">The page's job is to surface what's still actionable first, without silently destroying the record of what came before. A note and a demotion does both; deleting or leaving it in place only does one.</p>
+    </div>
+    <button onclick="resetAndShow('entry')" style="margin-top: 16px;">Start over</button>
+  </div>
+
+  <script>
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function resetAndShow(id) {
+      document.getElementById('hint').style.display = 'none';
+      showScreen(id);
+    }
+
+    function tryChoice(choice) {
+      const hint = document.getElementById('hint');
+
+      if (choice === 'note') {
+        showScreen('reflection');
+        return;
+      }
+
+      if (choice === 'delete') {
+        hint.textContent = "That keeps the page tidy, but members sometimes revisit an old listing to check a deadline or find contact info. Deleting erases that record entirely. Try again?";
+      } else if (choice === 'leave') {
+        hint.textContent = "That preserves the record, but it also buries this week's live opportunities under dead ones since everything is still sorted by its original deadline. Try again?";
+      }
+
+      hint.style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>

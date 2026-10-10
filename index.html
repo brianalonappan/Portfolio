@@ -8,28 +8,31 @@
 </head>
 <body>
 
-  <header>
+  <div class="world-wrap">
     <h1>Briana Lonappan</h1>
-    <p>Product-minded developer &amp; designer</p>
-  </header>
+    <p class="world-intro">Product-minded developer &amp; designer. Use arrow keys or WASD to walk around, then press Enter near a room to go inside.</p>
 
-  <main>
-    <a class="zone" href="skills-about.html">
-      <h2>Skills / About</h2>
-    </a>
+    <canvas id="world" width="900" height="600"></canvas>
+    <p id="world-prompt" class="world-prompt"></p>
 
-    <a class="zone" href="internship-externship.html">
-      <h2>Internship / Externship</h2>
-    </a>
+    <div class="world-fallback">
+      <p>Prefer clicking? Jump straight in:</p>
+      <a href="campus-leadership.html"><button>Campus Leadership</button></a>
+      <a href="projects-coursework.html"><button>Projects &amp; Coursework</button></a>
+      <a href="internship-externship.html"><button>Internship / Externship</button></a>
+      <a href="skills-about.html"><button>Skills / About</button></a>
+    </div>
+  </div>
 
-    <a class="zone" href="projects-coursework.html">
-      <h2>Projects &amp; Coursework</h2>
-    </a>
-
-    <a class="zone" href="campus-leadership.html">
-      <h2>Campus Leadership</h2>
-    </a>
-  </main>
+  <script src="world-engine.js"></script>
+  <script>
+    initWorld([
+      { x: 40,  y: 40,  w: 380, h: 230, label: 'Campus Leadership',      href: 'campus-leadership.html' },
+      { x: 480, y: 40,  w: 380, h: 230, label: 'Projects & Coursework',  href: 'projects-coursework.html' },
+      { x: 40,  y: 330, w: 380, h: 230, label: 'Internship / Externship', href: 'internship-externship.html' },
+      { x: 480, y: 330, w: 380, h: 230, label: 'Skills / About',         href: 'skills-about.html' }
+    ], { startX: 450, startY: 300 });
+  </script>
 
 </body>
 </html>

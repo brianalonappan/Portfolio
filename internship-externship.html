@@ -10,11 +10,31 @@
 
   <a class="back-link" href="index.html">&larr; Back to Hub</a>
 
-  <div class="placeholder">
-    <h1>Internship / Externship</h1>
-    <p>This zone is still being built. Check back soon.</p>
-    <a href="index.html"><button>Back to Hub</button></a>
+  <div class="world-wrap">
+    <h1>Dance Resource Center</h1>
+    <p class="world-intro">I intern at the DRC, a Los Angeles-based nonprofit dance organization, running several real content and communications workflows. Walk into a room to see one.</p>
+
+    <canvas id="world" width="900" height="600"></canvas>
+    <p id="world-prompt" class="world-prompt"></p>
+
+    <div class="world-fallback">
+      <p>Prefer clicking? Jump straight in:</p>
+      <a href="lam-newsletter.html"><button>LA Moves Newsletter</button></a>
+      <a href="mlp.html"><button>Member Landing Page</button></a>
+      <a href="community-calendar.html"><button>Community Calendar</button></a>
+      <a href="social-calendar.html"><button>Social Media Calendar</button></a>
+    </div>
   </div>
+
+  <script src="world-engine.js"></script>
+  <script>
+    initWorld([
+      { x: 40,  y: 40,  w: 380, h: 230, label: 'LA Moves Newsletter',    href: 'lam-newsletter.html' },
+      { x: 480, y: 40,  w: 380, h: 230, label: 'Member Landing Page',    href: 'mlp.html' },
+      { x: 40,  y: 330, w: 380, h: 230, label: 'Community Calendar',     href: 'community-calendar.html' },
+      { x: 480, y: 330, w: 380, h: 230, label: 'Social Media Calendar',  href: 'social-calendar.html' }
+    ], { startX: 450, startY: 300 });
+  </script>
 
 </body>
 </html>

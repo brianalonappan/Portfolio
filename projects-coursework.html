@@ -3,18 +3,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Projects &amp; Coursework — Bri Lonappan</title>
+  <title>Projects & Coursework — Bri Lonappan</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <a class="back-link" href="index.html">&larr; Back to Hub</a>
 
-  <div class="placeholder">
-    <h1>Projects &amp; Coursework</h1>
-    <p>This zone is still being built. Check back soon.</p>
-    <a href="index.html"><button>Back to Hub</button></a>
+  <!-- SCREEN 1: Entry/Intro -->
+  <div class="screen" id="entry">
+    <h1>Projects &amp; Coursework — Chop, Cook, Serve!</h1>
+    <p>For Interactive Entertainment Engineering, my 3-person team built a cooking and time-management game in under six weeks, inspired by Cooking Mama, Papa's Pizzeria, and Stardew Valley.</p>
+    <p>Early on, we had to make a scope call about how many food items the game would actually support.</p>
+    <button onclick="showScreen('decision')">Start</button>
   </div>
+
+  <!-- SCREEN 2: Decision (the mechanic) -->
+  <div class="screen hidden" id="decision">
+    <h1>What would you do?</h1>
+    <p>You're a team of 3 with 6 weeks. You originally planned pizza, salad, and beverages, each with its own cooking mechanic. What's the scope call?</p>
+    <div class="choices">
+      <button onclick="tryChoice('all')">Build all three: pizza, salad, and beverages</button>
+      <button onclick="tryChoice('one')">Cut down to one single pizza</button>
+      <button onclick="tryChoice('variants')">Narrow to two variants of one food item</button>
+    </div>
+    <p id="hint" class="why" style="display:none; margin-top: 16px;"></p>
+  </div>
+
+  <!-- SCREEN 3: Reflection -->
+  <div class="screen hidden" id="reflection">
+    <h1>Here's what we actually did:</h1>
+    <div class="reveal">
+      <p>We originally planned multiple food items: pizza, salad, and beverages. But each one needed its own separate cooking mechanic (chopping, mixing, timing logic), and building three solid mechanics wasn't realistic for a 3-person team in 6 weeks.</p>
+      <p>So we scoped down to two pizza variants, pepperoni and cheese. That let us build one cooking mechanic really well and still give players meaningful choice and variety, instead of three shallow, half-working ones.</p>
+      <p class="why">Depth over breadth: one well-built mechanic beats three rushed ones, especially under a hard team-size and time constraint.</p>
+    </div>
+    <button onclick="resetAndShow('entry')" style="margin-top: 16px;">Start over</button>
+  </div>
+
+  <script>
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function resetAndShow(id) {
+      document.getElementById('hint').style.display = 'none';
+      showScreen(id);
+    }
+
+    function tryChoice(choice) {
+      const hint = document.getElementById('hint');
+
+      if (choice === 'variants') {
+        showScreen('reflection');
+        return;
+      }
+
+      if (choice === 'all') {
+        hint.textContent = "That was the original plan, but each food item needed its own cooking mechanic. Three of those in 6 weeks with 3 people was too much. Try again?";
+      } else if (choice === 'one') {
+        hint.textContent = "That would've been safe, but a single pizza with no variation wouldn't give players much to actually choose between. Try again?";
+      }
+
+      hint.style.display = 'block';
+    }
+  </script>
 
 </body>
 </html>

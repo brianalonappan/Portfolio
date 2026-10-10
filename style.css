@@ -269,3 +269,132 @@ button:hover {
   color: #7a7266;
   margin-bottom: 20px;
 }
+
+/* ---------- Sorting puzzle mechanic (Internship/Externship) ---------- */
+
+.puzzle-list {
+  list-style: none;
+  margin-bottom: 16px;
+}
+
+.puzzle-item {
+  background-color: #f6f1e9;
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-left: 3px solid #d9d2c3;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.puzzle-item.assigned-week {
+  border-left-color: #1f2a44;
+  background-color: #eef1f6;
+}
+
+.puzzle-item.assigned-hold {
+  border-left-color: #d4a24e;
+  background-color: #f8f0e1;
+}
+
+.puzzle-item-text strong {
+  display: block;
+  color: #1f2a44;
+  font-size: 0.95rem;
+}
+
+.puzzle-item-text span {
+  display: block;
+  color: #7a7266;
+  font-size: 0.82rem;
+  margin-top: 2px;
+}
+
+.puzzle-item-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.puzzle-item-actions button {
+  margin: 0;
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  max-width: none;
+}
+
+.puzzle-item-actions button.active {
+  background-color: #d4a24e;
+  color: #1f2a44;
+}
+
+.puzzle-status {
+  text-align: center;
+  color: #7a7266;
+  font-size: 0.88rem;
+  margin-bottom: 16px;
+}
+
+.puzzle-status strong {
+  color: #1f2a44;
+}
+
+#check-sorting:disabled {
+  background-color: #d9d2c3;
+  color: #9c9284;
+  cursor: not-allowed;
+}
+
+/* ---------- Walkable world (Hub + DRC sub-hub) ---------- */
+
+.world-wrap {
+  max-width: 900px;
+  width: 100%;
+  text-align: center;
+}
+
+.world-wrap h1 {
+  font-size: 1.8rem;
+  font-weight: normal;
+  color: #1f2a44;
+  margin-bottom: 8px;
+}
+
+.world-wrap > p.world-intro {
+  color: #7a7266;
+  margin-bottom: 16px;
+}
+
+#world {
+  background-color: #f6f1e9;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(46, 42, 38, 0.08);
+  max-width: 100%;
+  height: auto;
+  outline: none;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+}
+
+.world-prompt {
+  margin-top: 12px;
+  font-size: 1rem;
+  color: #1f2a44;
+  font-weight: bold;
+  min-height: 1.2em;
+}
+
+.world-fallback {
+  margin-top: 28px;
+}
+
+.world-fallback p {
+  color: #7a7266;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
