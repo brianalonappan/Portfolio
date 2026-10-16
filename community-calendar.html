@@ -3,18 +3,226 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Community Calendar — Bri Lonappan</title>
+  <title>Community Calendar — Briana Lonappan</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <a class="back-link" href="internship-externship.html">&larr; Back to DRC</a>
 
-  <div class="placeholder">
+  <!-- SCREEN 1: Entry/Intro -->
+  <div class="screen" id="entry" style="max-width: 640px;">
     <h1>Community Calendar</h1>
-    <p>This room is still being built. Check back soon.</p>
-    <a href="internship-externship.html"><button>Back to DRC</button></a>
+    <p>I manage a public community calendar that lists dance events from across the city, sorted into four categories: Festivals, Performances, Intensives &amp; Workshops, and Convenings.</p>
+    <p>Getting an event into the right category is what makes the calendar actually useful, if everything gets dumped into one bucket, nobody can find what they're looking for. (The organizations and events below are invented for this demo, not real submissions.)</p>
+    <p>You've got 60 seconds to sort a batch of incoming submissions. Ready?</p>
+    <button onclick="startRound()">Start</button>
   </div>
+
+  <!-- SCREEN 2: Game -->
+  <div class="screen hidden" id="game" style="max-width: 700px;">
+    <h1>Sort the submissions</h1>
+
+    <div class="game-hud">
+      <div>Time left<strong id="timer">60</strong></div>
+      <div>Correct<strong id="score">0</strong></div>
+      <div>Placed<strong id="placed">0/8</strong></div>
+    </div>
+
+    <div class="card-pool" id="card-pool"></div>
+
+    <div class="bin-row">
+      <div class="bin" data-category="festivals">
+        <h3>Festivals</h3>
+      </div>
+      <div class="bin" data-category="performances">
+        <h3>Performances</h3>
+      </div>
+      <div class="bin" data-category="workshops">
+        <h3>Intensives &amp; Workshops</h3>
+      </div>
+      <div class="bin" data-category="convenings">
+        <h3>Convenings</h3>
+      </div>
+    </div>
+
+    <p style="color: #7a7266; font-size: 0.85rem; text-align: center;">Drag a card into a bin, or click a card then click a bin.</p>
+  </div>
+
+  <!-- SCREEN 3: Results -->
+  <div class="screen hidden" id="results" style="max-width: 640px;">
+    <h1>Round over</h1>
+    <p id="final-score" style="text-align: center; font-size: 1.2rem; color: #1f2a44;"></p>
+    <div class="results-panel">
+      <p>Real submissions aren't nearly this clean, plenty of events could plausibly fit two categories, and the deadline pressure is real every single week.</p>
+      <p class="why">Consistent categorization is what lets a member actually find what they're looking for. Someone scanning for a weekend workshop shouldn't have to wade through every festival and performance in the city to find it, the category someone chooses determines whether their event gets seen at all.</p>
+    </div>
+    <div style="margin-top: 16px;">
+      <button onclick="startRound()">Play Again</button>
+      <a href="internship-externship.html"><button>Back to DRC</button></a>
+    </div>
+  </div>
+
+  <script>
+    const POOL = [
+      { id: 'c1',  label: 'Autumn Leaves Dance Festival',            category: 'festivals' },
+      { id: 'c2',  label: 'Luna Ballet Co. presents Nocturne',       category: 'performances' },
+      { id: 'c3',  label: 'Weekend Flamenco Intensive',              category: 'workshops' },
+      { id: 'c4',  label: 'Member Mixer: Fall Gathering',            category: 'convenings' },
+      { id: 'c5',  label: 'City Lights Hip-Hop Festival',            category: 'festivals' },
+      { id: 'c6',  label: 'Modern Dance Theater: Fragments',         category: 'performances' },
+      { id: 'c7',  label: 'Contemporary Technique Workshop Series',  category: 'workshops' },
+      { id: 'c8',  label: 'Town Hall: Grant Writing 101',            category: 'convenings' },
+      { id: 'c9',  label: 'Riverside Dance Festival',                category: 'festivals' },
+      { id: 'c10', label: 'Aria Contemporary Dance Co.: Echoes',     category: 'performances' },
+      { id: 'c11', label: 'Intro to Afro-Caribbean Dance Workshop',  category: 'workshops' },
+      { id: 'c12', label: 'Community Potluck & Networking Night',    category: 'convenings' }
+    ];
+
+    const ROUND_SIZE = 8;
+    const ROUND_SECONDS = 60;
+
+    let roundCards = [];
+    let placedCount = 0;
+    let correctCount = 0;
+    let selectedId = null;
+    let timeLeft = ROUND_SECONDS;
+    let timerInterval = null;
+
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function startRound() {
+      roundCards = shuffle(POOL).slice(0, ROUND_SIZE);
+      placedCount = 0;
+      correctCount = 0;
+      selectedId = null;
+      timeLeft = ROUND_SECONDS;
+
+      document.querySelectorAll('.bin').forEach(bin => {
+        bin.querySelectorAll('.bin-chip').forEach(chip => chip.remove());
+      });
+
+      renderPool();
+      updateHud();
+
+      clearInterval(timerInterval);
+      timerInterval = setInterval(tick, 1000);
+
+      showScreen('game');
+    }
+
+    function tick() {
+      timeLeft--;
+      updateHud();
+      if (timeLeft <= 0) {
+        endRound();
+      }
+    }
+
+    function updateHud() {
+      document.getElementById('timer').textContent = Math.max(timeLeft, 0);
+      document.getElementById('score').textContent = correctCount;
+      document.getElementById('placed').textContent = `${placedCount}/${ROUND_SIZE}`;
+    }
+
+    function renderPool() {
+      const pool = document.getElementById('card-pool');
+      pool.innerHTML = '';
+
+      roundCards.forEach(card => {
+        const el = document.createElement('div');
+        el.className = 'event-card';
+        el.textContent = card.label;
+        el.draggable = true;
+        el.dataset.id = card.id;
+
+        el.addEventListener('dragstart', e => {
+          e.dataTransfer.setData('text/plain', card.id);
+          el.classList.add('dragging');
+        });
+        el.addEventListener('dragend', () => el.classList.remove('dragging'));
+
+        el.addEventListener('click', () => {
+          if (selectedId === card.id) {
+            selectedId = null;
+            el.classList.remove('selected');
+            return;
+          }
+          document.querySelectorAll('.event-card').forEach(c => c.classList.remove('selected'));
+          selectedId = card.id;
+          el.classList.add('selected');
+        });
+
+        pool.appendChild(el);
+      });
+    }
+
+    function placeCard(id, binCategory) {
+      const idx = roundCards.findIndex(c => c.id === id);
+      if (idx === -1) return;
+
+      const card = roundCards[idx];
+      roundCards.splice(idx, 1);
+
+      const isCorrect = card.category === binCategory;
+      if (isCorrect) correctCount++;
+      placedCount++;
+
+      const bin = document.querySelector(`.bin[data-category="${binCategory}"]`);
+      const chip = document.createElement('div');
+      chip.className = `bin-chip ${isCorrect ? 'correct' : 'incorrect'}`;
+      chip.textContent = card.label;
+      bin.appendChild(chip);
+
+      const cardEl = document.querySelector(`.event-card[data-id="${id}"]`);
+      if (cardEl) cardEl.remove();
+
+      selectedId = null;
+      updateHud();
+
+      if (placedCount >= ROUND_SIZE) {
+        endRound();
+      }
+    }
+
+    function endRound() {
+      clearInterval(timerInterval);
+      document.getElementById('final-score').textContent =
+        `${correctCount} / ${placedCount} sorted correctly` + (placedCount < ROUND_SIZE ? ` — ${ROUND_SIZE - placedCount} left on the floor when time ran out` : '');
+      showScreen('results');
+    }
+
+    document.querySelectorAll('.bin').forEach(bin => {
+      bin.addEventListener('dragover', e => {
+        e.preventDefault();
+        bin.classList.add('drag-over');
+      });
+      bin.addEventListener('dragleave', () => bin.classList.remove('drag-over'));
+      bin.addEventListener('drop', e => {
+        e.preventDefault();
+        bin.classList.remove('drag-over');
+        const id = e.dataTransfer.getData('text/plain');
+        placeCard(id, bin.dataset.category);
+      });
+      bin.addEventListener('click', () => {
+        if (selectedId) {
+          placeCard(selectedId, bin.dataset.category);
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>

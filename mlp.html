@@ -10,63 +10,189 @@
 
   <a class="back-link" href="internship-externship.html">&larr; Back to DRC</a>
 
-  <!-- SCREEN 1: Entry/Intro -->
-  <div class="screen" id="entry">
+  <!-- SCREEN 1: Intro -->
+  <div class="screen" id="entry" style="max-width: 640px;">
     <h1>Member Landing Page</h1>
-    <p>I manage the DRC Member Landing Page (MLP), where opportunities (grants, auditions, calls for submissions) are listed in chronological order by deadline, within each section.</p>
-    <p>Opportunities expire constantly. The question is what happens to a listing the moment its deadline passes.</p>
-    <button onclick="showScreen('decision')">Start</button>
+    <p>I maintain a members-only page that lists opportunities such as grants, auditions, and open calls. Two rules keep it useful: open items are listed in order of deadline, soonest first, and anything that has closed moves to the bottom with a standard note instead of being deleted.</p>
+    <p>Rebuild the page by clicking the opportunities in the order they belong. Three wrong picks and the round ends. (Every opportunity below is invented for this demo.)</p>
+    <button onclick="startRound()">Start</button>
   </div>
 
-  <!-- SCREEN 2: Decision (the mechanic) -->
-  <div class="screen hidden" id="decision">
-    <h1>What would you do?</h1>
-    <p>An opportunity's deadline passes overnight. It's still sitting in its chronological spot on the page. What's the move?</p>
-    <div class="choices">
-      <button onclick="tryChoice('delete')">Delete it immediately</button>
-      <button onclick="tryChoice('leave')">Leave it exactly where it is</button>
-      <button onclick="tryChoice('note')">Move it to the bottom with a standard "expired" note</button>
+  <!-- SCREEN 2: Game -->
+  <div class="screen hidden" id="game" style="max-width: 700px;">
+    <h1>Rebuild the page</h1>
+
+    <div class="game-hud">
+      <div>Time left<strong id="timer">60</strong></div>
+      <div>Placed<strong id="placed">0/6</strong></div>
+      <div>Strikes<strong id="strikes">0/3</strong></div>
     </div>
-    <p id="hint" class="why" style="display:none; margin-top: 16px;"></p>
+
+    <p style="text-align: center; color: #7a7266; font-size: 0.9rem;">Click the next item: soonest open deadline first, then the closed ones, most recently closed first.</p>
+
+    <div class="card-pool" id="card-pool"></div>
+
+    <div class="bin" style="margin-bottom: 20px;">
+      <h3>The page, top to bottom</h3>
+      <div id="page-list"></div>
+    </div>
   </div>
 
-  <!-- SCREEN 3: Reflection -->
-  <div class="screen hidden" id="reflection">
-    <h1>Here's what I actually did:</h1>
-    <div class="reveal">
-      <p>Expired opportunities get moved to the bottom of their section with a standard note instead of being deleted outright. The chronological order by deadline governs everything above that line, so what's still open always reads cleanest-first.</p>
-      <p>Deleting it would erase the record entirely, and members sometimes come back to a listing to double check a deadline they remember seeing, or to find contact info for next time it opens. Leaving it in its original spot would bury live opportunities under dead ones and break the whole point of sorting by deadline.</p>
-      <p class="why">The page's job is to surface what's still actionable first, without silently destroying the record of what came before. A note and a demotion does both; deleting or leaving it in place only does one.</p>
+  <!-- SCREEN 3: Results -->
+  <div class="screen hidden" id="results" style="max-width: 640px;">
+    <h1 id="result-title">Page updated</h1>
+    <p id="final-score" style="text-align: center; font-size: 1.1rem; color: #1f2a44;"></p>
+    <div class="results-panel">
+      <p>Closed opportunities stay on the page, moved to the bottom with a short note, instead of being deleted. Members sometimes come back to check a deadline they remember, or to find who to contact next time it opens.</p>
+      <p class="why">The page's job is to surface what's still actionable first without destroying the record of what came before. Sorting by deadline does the first part, and the demotion with a note does the second.</p>
     </div>
-    <button onclick="resetAndShow('entry')" style="margin-top: 16px;">Start over</button>
+    <div style="margin-top: 16px;">
+      <button onclick="startRound()">Play Again</button>
+      <a href="internship-externship.html"><button>Back to DRC</button></a>
+    </div>
   </div>
 
   <script>
+    const NAMES = [
+      'Fernhill Dance Grant', 'Copper Lane Audition Call', 'Silverbay Residency',
+      'Northlight Choreographer Fellowship', 'Tidewater Teaching Artist Call',
+      'Quill Street Festival Submissions', 'Aurora Youth Scholarship',
+      'Brightwater Commissioning Fund', 'Pinecrest Touring Grant', 'Opal Costume Design Call'
+    ];
+
+    const ROUND_SECONDS = 60;
+    const MAX_STRIKES = 3;
+
+    let queue = [];        // correct order, first = next expected
+    let remaining = [];    // cards still in the pool
+    let total = 0;
+    let placed = 0;
+    let strikes = 0;
+    let timeLeft = 0;
+    let timer = null;
+
+    function $(id) { return document.getElementById(id); }
+
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function distinct(n, min, max) {
+      const pool = [];
+      for (let v = min; v <= max; v++) pool.push(v);
+      return shuffle(pool).slice(0, n);
+    }
+
     function showScreen(id) {
       document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-      document.getElementById(id).classList.remove('hidden');
+      $(id).classList.remove('hidden');
     }
 
-    function resetAndShow(id) {
-      document.getElementById('hint').style.display = 'none';
-      showScreen(id);
+    function updateHud() {
+      $('timer').textContent = Math.max(timeLeft, 0);
+      $('placed').textContent = `${placed}/${total}`;
+      $('strikes').textContent = `${strikes}/${MAX_STRIKES}`;
     }
 
-    function tryChoice(choice) {
-      const hint = document.getElementById('hint');
+    function makeRound() {
+      const names = shuffle(NAMES).slice(0, 6);
+      const openDays = distinct(4, 1, 40);      // closes in N days
+      const closedDays = distinct(2, 1, 20);    // closed N days ago
 
-      if (choice === 'note') {
-        showScreen('reflection');
+      const open = openDays.map((d, i) => ({
+        id: 'o' + i, label: names[i], sub: `Closes in ${d} day${d === 1 ? '' : 's'}`, order: d, expired: false
+      }));
+      const closed = closedDays.map((d, i) => ({
+        id: 'c' + i, label: names[4 + i], sub: `Closed ${d} day${d === 1 ? '' : 's'} ago`, order: 1000 + d, expired: true, daysAgo: d
+      }));
+
+      const all = open.concat(closed);
+      queue = all.slice().sort((a, b) => a.order - b.order);
+      return shuffle(all);
+    }
+
+    function renderPool() {
+      const pool = $('card-pool');
+      pool.innerHTML = '';
+      remaining.forEach(card => {
+        const el = document.createElement('div');
+        el.className = 'event-card';
+        el.dataset.id = card.id;
+
+        const t = document.createElement('strong');
+        t.textContent = card.label;
+        const s = document.createElement('span');
+        s.textContent = card.sub;
+        el.appendChild(t);
+        el.appendChild(s);
+
+        el.addEventListener('click', () => pick(card, el));
+        pool.appendChild(el);
+      });
+    }
+
+    function pick(card, el) {
+      const expected = queue[0];
+
+      if (card.id !== expected.id) {
+        strikes++;
+        el.classList.add('wrong');
+        setTimeout(() => el.classList.remove('wrong'), 450);
+        updateHud();
+        if (strikes >= MAX_STRIKES) endRound(false);
         return;
       }
 
-      if (choice === 'delete') {
-        hint.textContent = "That keeps the page tidy, but members sometimes revisit an old listing to check a deadline or find contact info. Deleting erases that record entirely. Try again?";
-      } else if (choice === 'leave') {
-        hint.textContent = "That preserves the record, but it also buries this week's live opportunities under dead ones since everything is still sorted by its original deadline. Try again?";
-      }
+      queue.shift();
+      remaining = remaining.filter(c => c.id !== card.id);
+      el.remove();
+      placed++;
 
-      hint.style.display = 'block';
+      const chip = document.createElement('div');
+      chip.className = 'bin-chip correct';
+      chip.textContent = card.expired
+        ? `${card.label}. Closed ${card.daysAgo} day${card.daysAgo === 1 ? '' : 's'} ago. No longer accepting applications.`
+        : `${card.label}. ${card.sub}.`;
+      $('page-list').appendChild(chip);
+
+      updateHud();
+      if (placed >= total) endRound(true);
+    }
+
+    function endRound(finished) {
+      clearInterval(timer);
+      $('result-title').textContent = finished ? 'Page updated' : 'Round over';
+      $('final-score').textContent = finished
+        ? `All ${total} in the right order with ${strikes} strike${strikes === 1 ? '' : 's'}.`
+        : `${placed} of ${total} placed. ${strikes >= MAX_STRIKES ? 'Out of strikes.' : 'Time ran out.'}`;
+      showScreen('results');
+    }
+
+    function tick() {
+      timeLeft--;
+      updateHud();
+      if (timeLeft <= 0) endRound(false);
+    }
+
+    function startRound() {
+      remaining = makeRound();
+      total = remaining.length;
+      placed = 0;
+      strikes = 0;
+      timeLeft = ROUND_SECONDS;
+
+      $('page-list').innerHTML = '';
+      renderPool();
+      updateHud();
+
+      clearInterval(timer);
+      timer = setInterval(tick, 1000);
+      showScreen('game');
     }
   </script>
 

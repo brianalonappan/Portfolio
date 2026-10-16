@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bri Lonappan — Flat Map</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="world-wrap">
+    <h1>Bri Lonappan</h1>
+    <p class="world-intro">Flat map version. Use arrow keys or WASD to walk around, then press Enter near a room to go inside.</p>
+
+    <canvas id="world" width="900" height="600"></canvas>
+    <p id="world-prompt" class="world-prompt"></p>
+
+    <div class="world-fallback">
+      <p>Prefer clicking? Jump straight in:</p>
+      <a href="campus-leadership.html"><button>Campus Leadership</button></a>
+      <a href="projects-coursework.html"><button>Projects &amp; Coursework</button></a>
+      <a href="internship-externship.html"><button>Internship / Externship</button></a>
+      <a href="skills-about.html"><button>Skills / About</button></a>
+    </div>
+
+    <p style="margin-top: 28px; font-size: 0.85rem;"><a href="index.html" style="border-bottom: 1px solid #d4a24e;">Switch to the 3D world &rarr;</a></p>
+  </div>
+
+  <script src="world-engine.js"></script>
+  <script>
+    initWorld([
+      { x: 40,  y: 40,  w: 380, h: 230, label: 'Campus Leadership',      href: 'campus-leadership.html' },
+      { x: 480, y: 40,  w: 380, h: 230, label: 'Projects & Coursework',  href: 'projects-coursework.html' },
+      { x: 40,  y: 330, w: 380, h: 230, label: 'Internship / Externship', href: 'internship-externship.html' },
+      { x: 480, y: 330, w: 380, h: 230, label: 'Skills / About',         href: 'skills-about.html' }
+    ], { startX: 450, startY: 300 });
+  </script>
+
+</body>
+</html>

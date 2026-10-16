@@ -3,156 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LA Moves Newsletter — Bri Lonappan</title>
+  <title>Newsletter — Bri Lonappan</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <a class="back-link" href="internship-externship.html">&larr; Back to DRC</a>
 
-  <!-- SCREEN 1: Entry/Intro -->
-  <div class="screen" id="entry">
-    <h1>LA Moves Newsletter</h1>
-    <p>I produce LA Moves, a weekly newsletter sent to DRC members every Monday or Tuesday.</p>
-    <p>Each section has a strict cap, to keep the newsletter scannable. Some weeks, more relevant events and opportunities come in than fit, including some with dates still months away.</p>
-    <button onclick="showScreen('decision')">Start</button>
+  <!-- SCREEN 1: Intro -->
+  <div class="screen" id="entry" style="max-width: 640px;">
+    <h1>The Weekly Newsletter</h1>
+    <p>I help put together a weekly newsletter for a dance community. Every section has a hard cap on items, so the issue stays easy to scan.</p>
+    <p>More good items arrive than fit. The skill is deciding what goes in this week, and what waits on a hold list until it's closer to its date. (Every event and organization below is invented for this demo.)</p>
+    <p>Each round, six new submissions show up and there are only 3 slots. You have 45 seconds.</p>
+    <button onclick="startRound()">Start</button>
   </div>
 
-  <!-- SCREEN 2: Sorting puzzle -->
-  <div class="screen hidden" id="decision" style="max-width: 600px;">
-    <h1>Sort this week's queue</h1>
-    <p>Performances &amp; Events only has room for <strong>2 slots</strong> in this week's issue. Sort each item below into "This Week" or "Hold List," then check your sorting.</p>
+  <!-- SCREEN 2: Game -->
+  <div class="screen hidden" id="game" style="max-width: 700px;">
+    <h1>Fill this week's issue</h1>
 
-    <p class="puzzle-status">This Week: <strong id="week-count">0</strong>/2</p>
-
-    <ul class="puzzle-list" id="puzzle-list">
-      <li class="puzzle-item" data-id="robbins" data-correct="week">
-        <div class="puzzle-item-text">
-          <strong>Ballet Festival: Jerome Robbins</strong>
-          <span>Oct 23–25 — next week, promo code expires soon</span>
-        </div>
-        <div class="puzzle-item-actions">
-          <button onclick="assign(this, 'robbins', 'week')">This Week</button>
-          <button onclick="assign(this, 'robbins', 'hold')">Hold List</button>
-        </div>
-      </li>
-      <li class="puzzle-item" data-id="iwd" data-correct="week">
-        <div class="puzzle-item-text">
-          <strong>IWD Dance Festival — submissions</strong>
-          <span>Deadline Oct 10 — closes in 2 days</span>
-        </div>
-        <div class="puzzle-item-actions">
-          <button onclick="assign(this, 'iwd', 'week')">This Week</button>
-          <button onclick="assign(this, 'iwd', 'hold')">Hold List</button>
-        </div>
-      </li>
-      <li class="puzzle-item" data-id="contratiempo" data-correct="hold">
-        <div class="puzzle-item-text">
-          <strong>CONTRA-TIEMPO at The Wallis</strong>
-          <span>Dec 17–19 — two months out</span>
-        </div>
-        <div class="puzzle-item-actions">
-          <button onclick="assign(this, 'contratiempo', 'week')">This Week</button>
-          <button onclick="assign(this, 'contratiempo', 'hold')">Hold List</button>
-        </div>
-      </li>
-      <li class="puzzle-item" data-id="surge" data-correct="hold">
-        <div class="puzzle-item-text">
-          <strong>The Surge</strong>
-          <span>Jan 15–17, 2027 — four months out</span>
-        </div>
-        <div class="puzzle-item-actions">
-          <button onclick="assign(this, 'surge', 'week')">This Week</button>
-          <button onclick="assign(this, 'surge', 'hold')">Hold List</button>
-        </div>
-      </li>
-    </ul>
-
-    <p id="hint" class="why" style="display:none; margin-bottom: 12px;"></p>
-    <button id="check-sorting" onclick="checkSorting()" disabled>Check my sorting</button>
-  </div>
-
-  <!-- SCREEN 3: Reflection -->
-  <div class="screen hidden" id="reflection">
-    <h1>Here's what I actually did:</h1>
-    <div class="reveal">
-      <p>I keep a running hold list of events and opportunities that are worth sharing but too far out to earn one of the limited slots in a given week, things like a ballet festival three months away, or a submission deadline still weeks off.</p>
-      <p>Each week, I check that list against the calendar and bring items back in once they fall within the current month, or the next month if we're nearing the end of the current one. The items with the nearest dates and deadlines get the limited slots now; the rest wait their turn. That way nothing valuable gets permanently dropped just because it showed up too early, and the newsletter itself never gets bloated or hard to scan.</p>
-      <p class="why">The cap isn't really about limiting good content, it's about protecting the reader's attention. Sorting by urgency every week does more for the member reading the newsletter than cramming everything in the moment it arrives.</p>
+    <div class="game-hud">
+      <div>Time left<strong id="timer">45</strong></div>
+      <div>Correct<strong id="score">0</strong></div>
+      <div>Placed<strong id="placed">0/6</strong></div>
     </div>
-    <button onclick="resetAndShow('entry')" style="margin-top: 16px;">Start over</button>
+
+    <div class="card-pool" id="card-pool"></div>
+    <div class="bin-row" id="bin-row"></div>
+
+    <p style="color: #7a7266; font-size: 0.85rem; text-align: center;">Drag a card into a bin, or click a card then click a bin.</p>
   </div>
 
+  <!-- SCREEN 3: Results -->
+  <div class="screen hidden" id="results" style="max-width: 640px;">
+    <h1>Issue sent</h1>
+    <p id="final-score" style="text-align: center; font-size: 1.1rem; color: #1f2a44;"></p>
+    <div class="results-panel">
+      <p>The rule I work by: the items with the nearest dates and deadlines get this week's slots, and everything else waits on a hold list until it's close enough to matter.</p>
+      <p class="why">The cap isn't about limiting good content. It protects the reader's attention. Holding an item for the right week serves members better than cramming everything in the moment it arrives, and nothing valuable gets dropped just because it showed up early.</p>
+    </div>
+    <div style="margin-top: 16px;">
+      <button onclick="startRound()">Play Again</button>
+      <a href="internship-externship.html"><button>Back to DRC</button></a>
+    </div>
+  </div>
+
+  <script src="sort-game.js"></script>
   <script>
-    const assignments = {};
+    // All invented. 'show' items have an event date; 'deadline' items close on a date.
+    const ITEMS = [
+      { name: 'Harborlight Ballet Gala',          kind: 'show' },
+      { name: 'Cedar Street Tap Showcase',        kind: 'show' },
+      { name: 'Marigold Modern Dance Festival',   kind: 'show' },
+      { name: 'Lantern Hall Flamenco Night',      kind: 'show' },
+      { name: 'Orchard Contemporary: Tides',      kind: 'show' },
+      { name: 'Skyline Hip-Hop Cypher',           kind: 'show' },
+      { name: 'Juniper Dance Collective: Roots',  kind: 'show' },
+      { name: 'Foxglove Choreography Grant',      kind: 'deadline' },
+      { name: 'Ember Residency Applications',     kind: 'deadline' },
+      { name: 'Willow Fellowship for Dancers',    kind: 'deadline' },
+      { name: 'Atlas Teaching Artist Call',       kind: 'deadline' },
+      { name: 'Meridian Festival Submissions',    kind: 'deadline' }
+    ];
 
-    function showScreen(id) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-      document.getElementById(id).classList.remove('hidden');
+    function describe(item, days) {
+      const when = days < 30
+        ? `in ${days} day${days === 1 ? '' : 's'}`
+        : `in about ${Math.round(days / 30)} months`;
+      return item.kind === 'show' ? `Performance ${when}` : `Deadline ${when}`;
     }
 
-    function resetAndShow(id) {
-      document.getElementById('hint').style.display = 'none';
-      Object.keys(assignments).forEach(k => delete assignments[k]);
-      document.querySelectorAll('.puzzle-item').forEach(item => {
-        item.classList.remove('assigned-week', 'assigned-hold');
-        item.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-      });
-      updateCount();
-      document.getElementById('check-sorting').disabled = true;
-      showScreen(id);
+    function makeRound() {
+      const picks = shuffleArray(ITEMS).slice(0, 6);
+      const near = pickDistinct(3, 1, 14);     // these earn this week's slots
+      const far = pickDistinct(3, 40, 140);    // these wait on the hold list
+      const days = shuffleArray(near.concat(far));
+
+      return picks.map((item, i) => ({
+        id: 'n' + i,
+        label: item.name,
+        sub: describe(item, days[i]),
+        answer: days[i] <= 14 ? 'week' : 'hold'
+      }));
     }
 
-    function updateCount() {
-      const weekCount = Object.values(assignments).filter(v => v === 'week').length;
-      document.getElementById('week-count').textContent = weekCount;
-      return weekCount;
-    }
-
-    function allAssigned() {
-      return document.querySelectorAll('.puzzle-item').length === Object.keys(assignments).length;
-    }
-
-    function assign(btn, id, bin) {
-      const item = btn.closest('.puzzle-item');
-      const weekCount = Object.values(assignments).filter(v => v === 'week').length;
-
-      if (bin === 'week' && assignments[id] !== 'week' && weekCount >= 2) {
-        const hint = document.getElementById('hint');
-        hint.textContent = "This Week is full at 2 slots. Move something out of This Week before adding another, or hold this one instead.";
-        hint.style.display = 'block';
-        return;
-      }
-
-      assignments[id] = bin;
-      item.classList.remove('assigned-week', 'assigned-hold');
-      item.classList.add(bin === 'week' ? 'assigned-week' : 'assigned-hold');
-      item.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      updateCount();
-      document.getElementById('check-sorting').disabled = !allAssigned();
-    }
-
-    function checkSorting() {
-      const hint = document.getElementById('hint');
-      const items = document.querySelectorAll('.puzzle-item');
-      let allCorrect = true;
-
-      items.forEach(item => {
-        const id = item.dataset.id;
-        const correct = item.dataset.correct;
-        if (assignments[id] !== correct) allCorrect = false;
-      });
-
-      if (allCorrect) {
-        showScreen('reflection');
-        return;
-      }
-
-      hint.textContent = "Not quite the mix I'd ship. Think about which items have a hard deadline closing soon versus months of runway left, then try again.";
-      hint.style.display = 'block';
-    }
+    initSortGame({
+      seconds: 45,
+      makeRound,
+      bins: [
+        { id: 'week', label: 'This Week (3 slots)' },
+        { id: 'hold', label: 'Hold List' }
+      ]
+    });
   </script>
 
 </body>

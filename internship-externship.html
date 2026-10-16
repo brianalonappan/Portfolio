@@ -4,36 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Internship / Externship — Bri Lonappan</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="world3d.css">
 </head>
 <body>
 
-  <a class="back-link" href="index.html">&larr; Back to Hub</a>
+  <a class="back-link-3d" href="index.html">&larr; Back to hub</a>
+  <div id="intro-banner">Dance Resource Center wing. Each room is a small game based on a workflow I run as an intern (all scenarios are invented).</div>
 
-  <div class="world-wrap">
-    <h1>Dance Resource Center</h1>
-    <p class="world-intro">I intern at the DRC, a Los Angeles-based nonprofit dance organization, running several real content and communications workflows. Walk into a room to see one.</p>
-
-    <canvas id="world" width="900" height="600"></canvas>
-    <p id="world-prompt" class="world-prompt"></p>
-
-    <div class="world-fallback">
-      <p>Prefer clicking? Jump straight in:</p>
-      <a href="lam-newsletter.html"><button>LA Moves Newsletter</button></a>
-      <a href="mlp.html"><button>Member Landing Page</button></a>
-      <a href="community-calendar.html"><button>Community Calendar</button></a>
-      <a href="social-calendar.html"><button>Social Media Calendar</button></a>
+  <div id="scene-wrap">
+    <div id="labels"></div>
+    <div id="prompt-3d"></div>
+    <div id="no-webgl">
+      <p>The 3D world needs WebGL, which this browser isn't providing.</p>
+      <p style="margin-top: 8px;">Use the room links below to jump in.</p>
     </div>
   </div>
 
-  <script src="world-engine.js"></script>
+  <nav class="quick-links" aria-label="Rooms">
+    <a href="lam-newsletter.html" style="background:#ff8a3d">LA Moves Newsletter</a>
+    <a href="mlp.html" style="background:#22b8a9">Member Landing Page</a>
+    <a href="community-calendar.html" style="background:#e84fa8">Community Calendar</a>
+    <a href="social-calendar.html" style="background:#4d8cff">Social Media Calendar</a>
+  </nav>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="world3d-engine.js"></script>
   <script>
-    initWorld([
-      { x: 40,  y: 40,  w: 380, h: 230, label: 'LA Moves Newsletter',    href: 'lam-newsletter.html' },
-      { x: 480, y: 40,  w: 380, h: 230, label: 'Member Landing Page',    href: 'mlp.html' },
-      { x: 40,  y: 330, w: 380, h: 230, label: 'Community Calendar',     href: 'community-calendar.html' },
-      { x: 480, y: 330, w: 380, h: 230, label: 'Social Media Calendar',  href: 'social-calendar.html' }
-    ], { startX: 450, startY: 300 });
+    init3DWorld({
+      theme: { sky: 0xffcfb8, grass: 0x7fd66b, meadow: 0x9ae27a, decor: 'stage' },
+      seed: 21,
+      rooms: [
+        { label: 'LA Moves Newsletter',   href: 'lam-newsletter.html',     x: -6, z: -6, size: 4, color: 0xff8a3d, cap: 0xffb37a },
+        { label: 'Member Landing Page',   href: 'mlp.html',                x:  6, z: -6, size: 4, color: 0x22b8a9, cap: 0x6fe0d3 },
+        { label: 'Community Calendar',    href: 'community-calendar.html', x: -6, z:  6, size: 4, color: 0xe84fa8, cap: 0xf59ad0 },
+        { label: 'Social Media Calendar', href: 'social-calendar.html',    x:  6, z:  6, size: 4, color: 0x4d8cff, cap: 0x93b8ff }
+      ]
+    });
   </script>
 
 </body>

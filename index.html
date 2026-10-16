@@ -3,35 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Briana Lonappan — Portfolio</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Bri Lonappan — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="world3d.css">
 </head>
 <body>
 
-  <div class="world-wrap">
-    <h1>Briana Lonappan</h1>
-    <p class="world-intro">Product-minded developer &amp; designer. Use arrow keys or WASD to walk around, then press Enter near a room to go inside.</p>
+  <a class="back-link-3d" href="hub-2d.html">Flat map version</a>
+  <div id="intro-banner">Hi, I'm Bri. Roll around with WASD or arrow keys, hop onto a room, and press Enter to go inside.</div>
 
-    <canvas id="world" width="900" height="600"></canvas>
-    <p id="world-prompt" class="world-prompt"></p>
-
-    <div class="world-fallback">
-      <p>Prefer clicking? Jump straight in:</p>
-      <a href="campus-leadership.html"><button>Campus Leadership</button></a>
-      <a href="projects-coursework.html"><button>Projects &amp; Coursework</button></a>
-      <a href="internship-externship.html"><button>Internship / Externship</button></a>
-      <a href="skills-about.html"><button>Skills / About</button></a>
+  <div id="scene-wrap">
+    <div id="labels"></div>
+    <div id="prompt-3d"></div>
+    <div id="no-webgl">
+      <p>The 3D world needs WebGL, which this browser isn't providing.</p>
+      <p style="margin-top: 8px;">Use the room links below, or try the <a href="hub-2d.html">flat map</a>.</p>
     </div>
   </div>
 
-  <script src="world-engine.js"></script>
+  <nav class="quick-links" aria-label="Rooms">
+    <a href="campus-leadership.html" style="background:#ff6b8a">Campus Leadership</a>
+    <a href="projects-coursework.html" style="background:#22b8a9">Projects &amp; Coursework</a>
+    <a href="internship-externship.html" style="background:#8b6cff">Internship / Externship</a>
+    <a href="skills-about.html" style="background:#f2a516">Skills / About</a>
+  </nav>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="world3d-engine.js"></script>
   <script>
-    initWorld([
-      { x: 40,  y: 40,  w: 380, h: 230, label: 'Campus Leadership',      href: 'campus-leadership.html' },
-      { x: 480, y: 40,  w: 380, h: 230, label: 'Projects & Coursework',  href: 'projects-coursework.html' },
-      { x: 40,  y: 330, w: 380, h: 230, label: 'Internship / Externship', href: 'internship-externship.html' },
-      { x: 480, y: 330, w: 380, h: 230, label: 'Skills / About',         href: 'skills-about.html' }
-    ], { startX: 450, startY: 300 });
+    init3DWorld({
+      rooms: [
+        { label: 'Campus Leadership',       href: 'campus-leadership.html',     x: -6, z: -6, size: 4, color: 0xff6b8a, cap: 0xff9db3 },
+        { label: 'Projects & Coursework',   href: 'projects-coursework.html',   x:  6, z: -6, size: 4, color: 0x22b8a9, cap: 0x6fe0d3 },
+        { label: 'Internship / Externship', href: 'internship-externship.html', x: -6, z:  6, size: 4, color: 0x8b6cff, cap: 0xb7a3ff },
+        { label: 'Skills / About',          href: 'skills-about.html',          x:  6, z:  6, size: 4, color: 0xffb81f, cap: 0xffd978 }
+      ]
+    });
   </script>
 
 </body>

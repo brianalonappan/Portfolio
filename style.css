@@ -398,3 +398,157 @@ button:hover {
   font-size: 0.9rem;
   margin-bottom: 10px;
 }
+
+/* ---------- Shuffled card-sort mini-game (Community Calendar) ---------- */
+
+.game-hud {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-bottom: 18px;
+  font-size: 0.85rem;
+  color: #7a7266;
+  text-align: center;
+}
+
+.game-hud strong {
+  display: block;
+  font-size: 1.4rem;
+  color: #1f2a44;
+}
+
+.card-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  min-height: 56px;
+  margin-bottom: 24px;
+  padding: 12px;
+  background-color: #f0ebe0;
+  border-radius: 8px;
+}
+
+.event-card {
+  background-color: #fffdf9;
+  border: 2px solid #d9d2c3;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  color: #1f2a44;
+  cursor: grab;
+  user-select: none;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+
+.event-card:active {
+  cursor: grabbing;
+}
+
+.event-card.selected {
+  border-color: #1f2a44;
+  background-color: #eef1f6;
+  transform: translateY(-2px);
+}
+
+.event-card.dragging {
+  opacity: 0.4;
+}
+
+.bin-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.bin {
+  background-color: #fffdf9;
+  border: 2px dashed #d9d2c3;
+  border-radius: 8px;
+  padding: 14px;
+  min-height: 130px;
+  text-align: left;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.bin.drag-over {
+  border-color: #d4a24e;
+  background-color: #f8f0e1;
+}
+
+.bin h3 {
+  font-size: 0.9rem;
+  font-weight: normal;
+  color: #1f2a44;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #d9d2c3;
+  padding-bottom: 6px;
+}
+
+.bin-chip {
+  font-size: 0.78rem;
+  padding: 5px 8px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.bin-chip.correct {
+  background-color: #e3ecdd;
+  color: #3a5a34;
+}
+
+.bin-chip.incorrect {
+  background-color: #f6dede;
+  color: #7a2e2e;
+}
+
+.results-panel {
+  background-color: #f6f1e9;
+  padding: 20px;
+  border-radius: 6px;
+  text-align: left;
+  border-left: 3px solid #d4a24e;
+  margin-top: 8px;
+}
+
+/* Two-line cards (title + small detail line), wider cards, and 5-column bin rows */
+
+.event-card strong {
+  display: block;
+  font-weight: normal;
+}
+
+.event-card span {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.75rem;
+  color: #7a7266;
+}
+
+.event-card.wide {
+  max-width: 260px;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.event-card.wrong {
+  border-color: #c0392b;
+  background-color: #f6dede;
+}
+
+.bin-row.five {
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.bin-row.five .bin {
+  padding: 10px;
+}
+
+@media (max-width: 640px) {
+  .bin-row,
+  .bin-row.five {
+    grid-template-columns: 1fr;
+  }
+}

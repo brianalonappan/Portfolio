@@ -10,11 +10,96 @@
 
   <a class="back-link" href="internship-externship.html">&larr; Back to DRC</a>
 
-  <div class="placeholder">
+  <!-- SCREEN 1: Intro -->
+  <div class="screen" id="entry" style="max-width: 640px;">
     <h1>Social Media Calendar</h1>
-    <p>This room is still being built. Check back soon.</p>
-    <a href="internship-externship.html"><button>Back to DRC</button></a>
+    <p>I plan social posts for a dance organization, with two goals: grow an authentic following and bring more people onto the email list.</p>
+    <p>A post only works if it lands at the right moment. Too early and people forget, too late and they've missed it. (Every event below is invented for this demo.)</p>
+    <p>Each round gives you five post ideas and a Monday to Friday week. Put each post on the day it should go out. You have 60 seconds.</p>
+    <button onclick="startRound()">Start</button>
   </div>
+
+  <!-- SCREEN 2: Game -->
+  <div class="screen hidden" id="game" style="max-width: 900px;">
+    <h1>Plan the week</h1>
+
+    <div class="game-hud">
+      <div>Time left<strong id="timer">60</strong></div>
+      <div>Correct<strong id="score">0</strong></div>
+      <div>Placed<strong id="placed">0/5</strong></div>
+    </div>
+
+    <div class="card-pool" id="card-pool"></div>
+    <div class="bin-row" id="bin-row"></div>
+
+    <p style="color: #7a7266; font-size: 0.85rem; text-align: center;">Drag a post onto a day, or click a post then click a day.</p>
+  </div>
+
+  <!-- SCREEN 3: Results -->
+  <div class="screen hidden" id="results" style="max-width: 640px;">
+    <h1>Week scheduled</h1>
+    <p id="final-score" style="text-align: center; font-size: 1.1rem; color: #1f2a44;"></p>
+    <div class="results-panel">
+      <p>Real calendars have more moving parts: several platforms, cultural observances, and events that shift. But the core question for every post is the same: when will the right person actually act on it?</p>
+      <p class="why">Timing is part of the message. A reminder that arrives two days before an event gets people to register, while the same reminder a week early gets scrolled past. Planning the whole week at once also keeps posts from piling up on one day.</p>
+    </div>
+    <div style="margin-top: 16px;">
+      <button onclick="startRound()">Play Again</button>
+      <a href="internship-externship.html"><button>Back to DRC</button></a>
+    </div>
+  </div>
+
+  <script src="sort-game.js"></script>
+  <script>
+    // Two invented post ideas per weekday; each round uses one per day, shuffled.
+    const TEMPLATES = {
+      mon: [
+        'A new heritage month starts Tuesday. Welcome it the day before.',
+        'The studio open house is Tuesday evening. Send the first announcement the day before.'
+      ],
+      tue: [
+        'Showcase auditions close Thursday. Post the first call two days ahead.',
+        'Weekend workshop registration closes Friday. Start the countdown three days ahead.'
+      ],
+      wed: [
+        'A gala is Friday night. Post the reminder two days before.',
+        'The member spotlight goes out the day before Thursday\'s newsletter.'
+      ],
+      thu: [
+        'A free community class is Saturday morning. Post the reminder two days ahead.',
+        'Discounted tickets end Friday. Post the last-chance notice the day before.'
+      ],
+      fri: [
+        'A show is Saturday night. Post the "tomorrow" nudge the day before.',
+        'A donation drive ends Sunday. Post the final push on the last weekday before it ends.'
+      ]
+    };
+
+    function makeRound() {
+      return Object.keys(TEMPLATES).map(day => {
+        const options = TEMPLATES[day];
+        return {
+          id: 'p' + day,
+          label: options[Math.floor(Math.random() * options.length)],
+          answer: day,
+          wide: true
+        };
+      });
+    }
+
+    initSortGame({
+      seconds: 60,
+      makeRound: () => shuffleArray(makeRound()),
+      binRowClass: 'five',
+      bins: [
+        { id: 'mon', label: 'Monday' },
+        { id: 'tue', label: 'Tuesday' },
+        { id: 'wed', label: 'Wednesday' },
+        { id: 'thu', label: 'Thursday' },
+        { id: 'fri', label: 'Friday' }
+      ]
+    });
+  </script>
 
 </body>
 </html>
