@@ -15,7 +15,8 @@
     <h1>Community Calendar</h1>
     <p>I manage a public community calendar that lists dance events from across the city, sorted into four categories: Festivals, Performances, Intensives &amp; Workshops, and Convenings.</p>
     <p>Getting an event into the right category is what makes the calendar actually useful, if everything gets dumped into one bucket, nobody can find what they're looking for. (The organizations and events below are invented for this demo, not real submissions.)</p>
-    <p>You've got 60 seconds to sort a batch of incoming submissions. Ready?</p>
+    <p>You've got 90 seconds to sort a batch of incoming submissions, or you can turn the timer off. Ready?</p>
+    <label class="timer-opt"><input type="checkbox" id="timer-off"> Play without a timer</label>
     <button onclick="startRound()">Start</button>
   </div>
 
@@ -24,7 +25,7 @@
     <h1>Sort the submissions</h1>
 
     <div class="game-hud">
-      <div>Time left<strong id="timer">60</strong></div>
+      <div>Time left<strong id="timer">90</strong></div>
       <div>Correct<strong id="score">0</strong></div>
       <div>Placed<strong id="placed">0/8</strong></div>
     </div>
@@ -80,7 +81,7 @@
     ];
 
     const ROUND_SIZE = 8;
-    const ROUND_SECONDS = 60;
+    const ROUND_SECONDS = 90;
 
     let roundCards = [];
     let placedCount = 0;
@@ -88,6 +89,7 @@
     let selectedId = null;
     let timeLeft = ROUND_SECONDS;
     let timerInterval = null;
+    let untimed = false;
 
     function shuffle(arr) {
       const a = arr.slice();
@@ -108,6 +110,7 @@
       placedCount = 0;
       correctCount = 0;
       selectedId = null;
+      untimed = document.getElementById('timer-off').checked;
       timeLeft = ROUND_SECONDS;
 
       document.querySelectorAll('.bin').forEach(bin => {
@@ -118,7 +121,7 @@
       updateHud();
 
       clearInterval(timerInterval);
-      timerInterval = setInterval(tick, 1000);
+      if (!untimed) timerInterval = setInterval(tick, 1000);
 
       showScreen('game');
     }
@@ -132,7 +135,7 @@
     }
 
     function updateHud() {
-      document.getElementById('timer').textContent = Math.max(timeLeft, 0);
+      document.getElementById('timer').textContent = untimed ? 'Off' : Math.max(timeLeft, 0);
       document.getElementById('score').textContent = correctCount;
       document.getElementById('placed').textContent = `${placedCount}/${ROUND_SIZE}`;
     }

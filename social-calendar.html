@@ -15,7 +15,8 @@
     <h1>Social Media Calendar</h1>
     <p>I plan social posts for a dance organization, with two goals: grow an authentic following and bring more people onto the email list.</p>
     <p>A post only works if it lands at the right moment. Too early and people forget, too late and they've missed it. (Every event below is invented for this demo.)</p>
-    <p>Each round gives you five post ideas and a Monday to Friday week. Put each post on the day it should go out. You have 60 seconds.</p>
+    <p>Each round gives you five post ideas and a Monday to Friday week. Put each post on the day it should go out. You have 90 seconds, or you can turn the timer off.</p>
+    <label class="timer-opt"><input type="checkbox" id="timer-off"> Play without a timer</label>
     <button onclick="startRound()">Start</button>
   </div>
 
@@ -24,7 +25,7 @@
     <h1>Plan the week</h1>
 
     <div class="game-hud">
-      <div>Time left<strong id="timer">60</strong></div>
+      <div>Time left<strong id="timer">90</strong></div>
       <div>Correct<strong id="score">0</strong></div>
       <div>Placed<strong id="placed">0/5</strong></div>
     </div>
@@ -88,7 +89,7 @@
     }
 
     initSortGame({
-      seconds: 60,
+      seconds: 90,
       makeRound: () => shuffleArray(makeRound()),
       binRowClass: 'five',
       bins: [

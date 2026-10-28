@@ -15,7 +15,8 @@
     <h1>The Weekly Newsletter</h1>
     <p>I help put together a weekly newsletter for a dance community. Every section has a hard cap on items, so the issue stays easy to scan.</p>
     <p>More good items arrive than fit. The skill is deciding what goes in this week, and what waits on a hold list until it's closer to its date. (Every event and organization below is invented for this demo.)</p>
-    <p>Each round, six new submissions show up and there are only 3 slots. You have 45 seconds.</p>
+    <p>Each round, six new submissions show up and there are only 3 slots. You have 75 seconds, or you can turn the timer off.</p>
+    <label class="timer-opt"><input type="checkbox" id="timer-off"> Play without a timer</label>
     <button onclick="startRound()">Start</button>
   </div>
 
@@ -24,7 +25,7 @@
     <h1>Fill this week's issue</h1>
 
     <div class="game-hud">
-      <div>Time left<strong id="timer">45</strong></div>
+      <div>Time left<strong id="timer">75</strong></div>
       <div>Correct<strong id="score">0</strong></div>
       <div>Placed<strong id="placed">0/6</strong></div>
     </div>
@@ -89,7 +90,7 @@
     }
 
     initSortGame({
-      seconds: 45,
+      seconds: 75,
       makeRound,
       bins: [
         { id: 'week', label: 'This Week (3 slots)' },

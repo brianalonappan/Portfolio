@@ -14,7 +14,8 @@
   <div class="screen" id="entry" style="max-width: 640px;">
     <h1>Member Landing Page</h1>
     <p>I maintain a members-only page that lists opportunities such as grants, auditions, and open calls. Two rules keep it useful: open items are listed in order of deadline, soonest first, and anything that has closed moves to the bottom with a standard note instead of being deleted.</p>
-    <p>Rebuild the page by clicking the opportunities in the order they belong. Three wrong picks and the round ends. (Every opportunity below is invented for this demo.)</p>
+    <p>Rebuild the page by clicking the opportunities in the order they belong. Three wrong picks and the round ends. You have 90 seconds, or you can turn the timer off. (Every opportunity below is invented for this demo.)</p>
+    <label class="timer-opt"><input type="checkbox" id="timer-off"> Play without a timer</label>
     <button onclick="startRound()">Start</button>
   </div>
 
@@ -23,7 +24,7 @@
     <h1>Rebuild the page</h1>
 
     <div class="game-hud">
-      <div>Time left<strong id="timer">60</strong></div>
+      <div>Time left<strong id="timer">90</strong></div>
       <div>Placed<strong id="placed">0/6</strong></div>
       <div>Strikes<strong id="strikes">0/3</strong></div>
     </div>
@@ -60,7 +61,7 @@
       'Brightwater Commissioning Fund', 'Pinecrest Touring Grant', 'Opal Costume Design Call'
     ];
 
-    const ROUND_SECONDS = 60;
+    const ROUND_SECONDS = 90;
     const MAX_STRIKES = 3;
 
     let queue = [];        // correct order, first = next expected
@@ -70,6 +71,7 @@
     let strikes = 0;
     let timeLeft = 0;
     let timer = null;
+    let untimed = false;
 
     function $(id) { return document.getElementById(id); }
 
@@ -94,7 +96,7 @@
     }
 
     function updateHud() {
-      $('timer').textContent = Math.max(timeLeft, 0);
+      $('timer').textContent = untimed ? 'Off' : Math.max(timeLeft, 0);
       $('placed').textContent = `${placed}/${total}`;
       $('strikes').textContent = `${strikes}/${MAX_STRIKES}`;
     }
@@ -184,6 +186,7 @@
       total = remaining.length;
       placed = 0;
       strikes = 0;
+      untimed = $('timer-off').checked;
       timeLeft = ROUND_SECONDS;
 
       $('page-list').innerHTML = '';
@@ -191,7 +194,7 @@
       updateHud();
 
       clearInterval(timer);
-      timer = setInterval(tick, 1000);
+      if (!untimed) timer = setInterval(tick, 1000);
       showScreen('game');
     }
   </script>

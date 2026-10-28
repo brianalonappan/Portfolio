@@ -552,3 +552,11 @@ button:hover {
     grid-template-columns: 1fr;
   }
 }
+.timer-opt {
+  display: block;
+  margin: 0 0 14px;
+  font-size: 0.9rem;
+  color: #7a7266;
+  cursor: pointer;
+}
+.timer-opt input { margin-right: 6px; }

@@ -21,6 +21,7 @@ function initSortGame(cfg) {
   let selectedId = null;
   let timeLeft = 0;
   let timerInterval = null;
+  let untimed = false;
   let best = 0;
 
   function showScreen(id) {
@@ -29,7 +30,7 @@ function initSortGame(cfg) {
   }
 
   function updateHud() {
-    $('timer').textContent = Math.max(timeLeft, 0);
+    $('timer').textContent = untimed ? 'Off' : Math.max(timeLeft, 0);
     $('score').textContent = correctCount;
     $('placed').textContent = `${placedCount}/${total}`;
   }
@@ -155,6 +156,8 @@ function initSortGame(cfg) {
     placedCount = 0;
     correctCount = 0;
     selectedId = null;
+    const off = $('timer-off');
+    untimed = !!(off && off.checked);
     timeLeft = cfg.seconds;
 
     buildBins();
@@ -162,7 +165,7 @@ function initSortGame(cfg) {
     updateHud();
 
     clearInterval(timerInterval);
-    timerInterval = setInterval(tick, 1000);
+    if (!untimed) timerInterval = setInterval(tick, 1000);
     showScreen('game');
   };
 }
