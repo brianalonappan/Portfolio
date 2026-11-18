@@ -4,70 +4,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Projects & Coursework — Briana Lonappan</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="world3d.css">
 </head>
 <body>
 
-  <a class="back-link" href="index.html">&larr; Back to Hub</a>
+  <a class="back-link-3d" href="index.html">&larr; Back to hub</a>
+  <div id="intro-banner">Projects and Coursework. Roll onto a room and press Enter, or click a room's name.</div>
 
-  <!-- SCREEN 1: Entry/Intro -->
-  <div class="screen" id="entry">
-    <h1>Projects &amp; Coursework — Chop, Cook, Serve!</h1>
-    <p>For Interactive Entertainment Engineering, my 3-person team built a cooking and time-management game in under six weeks, inspired by Cooking Mama, Papa's Pizzeria, and Stardew Valley.</p>
-    <p>Early on, we had to make a scope call about how many food items the game would actually support.</p>
-    <button onclick="showScreen('decision')">Start</button>
-  </div>
-
-  <!-- SCREEN 2: Decision (the mechanic) -->
-  <div class="screen hidden" id="decision">
-    <h1>What would you do?</h1>
-    <p>You're a team of 3 with 6 weeks. You originally planned pizza, salad, and beverages, each with its own cooking mechanic. What's the scope call?</p>
-    <div class="choices">
-      <button onclick="tryChoice('all')">Build all three: pizza, salad, and beverages</button>
-      <button onclick="tryChoice('one')">Cut down to one single pizza</button>
-      <button onclick="tryChoice('variants')">Narrow to two variants of one food item</button>
+  <div id="scene-wrap">
+    <div id="labels"></div>
+    <div id="prompt-3d"></div>
+    <div id="no-webgl">
+      <p>The 3D world needs WebGL, which this browser isn't providing.</p>
+      <p style="margin-top: 8px;">Use the room links below to jump in.</p>
     </div>
-    <p id="hint" class="why" style="display:none; margin-top: 16px;"></p>
   </div>
 
-  <!-- SCREEN 3: Reflection -->
-  <div class="screen hidden" id="reflection">
-    <h1>Here's what we actually did:</h1>
-    <div class="reveal">
-      <p>We originally planned multiple food items: pizza, salad, and beverages. But each one needed its own separate cooking mechanic (chopping, mixing, timing logic), and building three solid mechanics wasn't realistic for a 3-person team in 6 weeks.</p>
-      <p>So we scoped down to two pizza variants, pepperoni and cheese. That let us build one cooking mechanic really well and still give players meaningful choice and variety, instead of three shallow, half-working ones.</p>
-      <p class="why">Depth over breadth: one well-built mechanic beats three rushed ones, especially under a hard team-size and time constraint.</p>
-    </div>
-    <button onclick="resetAndShow('entry')" style="margin-top: 16px;">Start over</button>
-  </div>
+  <nav class="quick-links" aria-label="Rooms">
+    <a href="projects-chop-cook-serve.html" style="background:#ff9d3f">Chop, Cook, Serve!</a>
+    <a href="projects-scope-call.html" style="background:#22b8a9">Build It or Cut It</a>
+    <a href="projects-ux-lab.html" style="background:#e84fa8">Usability Lab</a>
+  </nav>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="world3d-engine.js"></script>
   <script>
-    function showScreen(id) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-      document.getElementById(id).classList.remove('hidden');
-    }
-
-    function resetAndShow(id) {
-      document.getElementById('hint').style.display = 'none';
-      showScreen(id);
-    }
-
-    function tryChoice(choice) {
-      const hint = document.getElementById('hint');
-
-      if (choice === 'variants') {
-        showScreen('reflection');
-        return;
-      }
-
-      if (choice === 'all') {
-        hint.textContent = "That was the original plan, but each food item needed its own cooking mechanic. Three of those in 6 weeks with 3 people was too much. Try again?";
-      } else if (choice === 'one') {
-        hint.textContent = "That would've been safe, but a single pizza with no variation wouldn't give players much to actually choose between. Try again?";
-      }
-
-      hint.style.display = 'block';
-    }
+    init3DWorld({
+      theme: { sky: 0xa8ece6, grass: 0x5fcf8a, meadow: 0x7fe0a0, decor: 'arcade' },
+      seed: 5,
+      rooms: [
+        { label: 'Chop, Cook, Serve!', href: 'projects-chop-cook-serve.html', x: -7, z: -5, size: 4, color: 0xff9d3f, cap: 0xffc680 },
+        { label: 'Build It or Cut It', href: 'projects-scope-call.html', x: 7, z: -5, size: 4, color: 0x22b8a9, cap: 0x6fe0d3 },
+        { label: 'Usability Lab', href: 'projects-ux-lab.html', x: 0, z: 7, size: 4, color: 0xe84fa8, cap: 0xf59ad0 }
+      ],
+      npc: { lines: [
+        "Hi! I'm Briana. Welcome to my projects wing.",
+        "My team of three made Chop, Cook, Serve! in under six weeks.",
+        "Try Build It or Cut It to make the same scope call we had to make.",
+        "Usability Lab is how I sort tester feedback."
+      ] }
+    });
   </script>
 
 </body>

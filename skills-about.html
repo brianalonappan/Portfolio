@@ -4,61 +4,50 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Skills / About — Briana Lonappan</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="world3d.css">
 </head>
 <body>
 
-  <a class="back-link" href="index.html">&larr; Back to Hub</a>
+  <a class="back-link-3d" href="index.html">&larr; Back to hub</a>
+  <div id="intro-banner">Skills and About. Roll onto a room and press Enter, or click a room's name.</div>
 
-  <div class="about-wrap">
-
-    <div class="about-header">
-      <h1>Briana Lonappan</h1>
-      <p>Computer Science student, product-minded developer &amp; designer</p>
-    </div>
-
-    <div class="about-grid">
-
-      <div class="about-card">
-        <h2>Education</h2>
-        <p><strong>California Polytechnic State University, San Luis Obispo</strong><br>
-        B.S. Computer Science<br>
-        Sep 2022 &ndash; Dec 2026</p>
-        <p style="margin-top: 10px;">Coursework: Data Structures, Discrete Structures, Systems Programming, Intro to Database Systems, Intro to Data Science, Game Design, User-Centered UI/UX Design</p>
-      </div>
-
-      <div class="about-card">
-        <h2>Contact</h2>
-        <div class="contact-links">
-          <a href="mailto:brianalonapp@gmail.com">Email</a>
-          <a href="https://www.linkedin.com/in/brianalona/" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://light-raja-d10.notion.site/Product-Management-Portfolio-Briana-Lonappan-38736019e3d8804f82adeb0d1225bd33?pvs=74" target="_blank" rel="noopener">PM Portfolio</a>
-        </div>
-        <p style="margin-top: 14px;">Los Angeles, CA</p>
-      </div>
-
-      <div class="about-card full">
-        <h2>Skills</h2>
-        <div class="skill-group">
-          <strong>Technical</strong>
-          Python, SQL, Java, C++, HTML, TypeScript, R
-        </div>
-        <div class="skill-group">
-          <strong>Tools</strong>
-          Figma, Notion, Canva, Jira, Tableau, Google Workspace, Microsoft Office, Slack, Excel, Mailchimp, Airtable, WordPress
-        </div>
-        <div class="skill-group">
-          <strong>AI Tools</strong>
-          ChatGPT, Claude, Gemini
-        </div>
-        <div class="skill-group">
-          <strong>Interests</strong>
-          Product Management, Consumer Apps, Ecommerce and Retail Tech, User Research, Competitive Analysis
-        </div>
-      </div>
-
+  <div id="scene-wrap">
+    <div id="labels"></div>
+    <div id="prompt-3d"></div>
+    <div id="no-webgl">
+      <p>The 3D world needs WebGL, which this browser isn't providing.</p>
+      <p style="margin-top: 8px;">Use the room links below to jump in.</p>
     </div>
   </div>
+
+  <nav class="quick-links" aria-label="Rooms">
+    <a href="about-me.html" style="background:#ffb81f">About Me</a>
+    <a href="skills-sort.html" style="background:#ff6b8a">Skills Check</a>
+    <a href="contact.html" style="background:#22b8a9">Contact</a>
+  </nav>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="world3d-engine.js"></script>
+  <script>
+    init3DWorld({
+      theme: { sky: 0xfff0b3, grass: 0x9bd95a, meadow: 0xb8e86e, decor: 'stack' },
+      seed: 9,
+      rooms: [
+        { label: 'About Me', href: 'about-me.html', x: -7, z: -5, size: 4, color: 0xffb81f, cap: 0xffd978 },
+        { label: 'Skills Check', href: 'skills-sort.html', x: 7, z: -5, size: 4, color: 0xff6b8a, cap: 0xff9db3 },
+        { label: 'Contact', href: 'contact.html', x: 0, z: 7, size: 4, color: 0x22b8a9, cap: 0x6fe0d3 }
+      ],
+      npc: { lines: [
+        "Hi! I'm Briana. I'm a Computer Science student at Cal Poly.",
+        "I graduate in December 2026.",
+        "Skills Check is a quick game with the tools on my resume.",
+        "Contact is the fastest way to reach me."
+      ] }
+    });
+  </script>
 
 </body>
 </html>
