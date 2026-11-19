@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Week — Briana Lonappan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <a class="back-link" href="campus-leadership.html">&larr; Back to Campus Leadership</a>
+
+  <!-- SCREEN 1: Intro -->
+  <div class="screen" id="entry" style="max-width: 640px;">
+    <h1>Event Week</h1>
+    <p>As Engagement Chair for the Interhousing Council, I plan events from the first idea to the last thank-you. The skill is knowing which task belongs in which part of the timeline, so nothing gets done too late to matter.</p>
+    <p>Each round gives you eight tasks. Sort each one into when it should happen. (Every task below is invented for this demo.)</p>
+    <label class="timer-opt"><input type="checkbox" id="timer-off"> Play without a timer</label>
+    <button onclick="startRound()">Start</button>
+  </div>
+
+  <!-- SCREEN 2: Game -->
+  <div class="screen hidden" id="game" style="max-width: 760px;">
+    <h1>When does it happen?</h1>
+
+    <div class="game-hud">
+      <div>Time left<strong id="timer">90</strong></div>
+      <div>Correct<strong id="score">0</strong></div>
+      <div>Placed<strong id="placed">0/8</strong></div>
+    </div>
+
+    <div class="card-pool" id="card-pool"></div>
+    <div class="bin-row" id="bin-row"></div>
+
+    <p style="color: #7a7266; font-size: 0.85rem; text-align: center;">Drag a card into a bin, or click a card then click a bin.</p>
+  </div>
+
+  <!-- SCREEN 3: Results -->
+  <div class="screen hidden" id="results" style="max-width: 640px;">
+    <h1>Timeline set</h1>
+    <p id="final-score" style="text-align: center; font-size: 1.1rem; color: #1f2a44;"></p>
+    <div class="results-panel">
+      <p>The rule I work by: start from the event date and work backwards, so each task lands when it can still change the outcome.</p>
+      <p class="why">The last bin matters as much as the first. Writing turnout down after every event is how a trend like falling attendance becomes something you can see and act on.</p>
+    </div>
+    <div style="margin-top: 16px;">
+      <button onclick="startRound()">Play Again</button>
+      <a href="campus-leadership.html"><button>Back to Campus Leadership</button></a>
+    </div>
+  </div>
+
+  <script src="sort-game.js"></script>
+  <script>
+    const BINS = [
+      { id: 'early', label: 'Weeks before' },
+      { id: 'week',  label: 'Week of' },
+      { id: 'day',   label: 'Day of' },
+      { id: 'after', label: 'After' }
+    ];
+
+    // All invented. Two random tasks per bin each round.
+    const TASKS = {
+      early: ['Reserve the venue', 'Request the dining budget', 'Recruit the planning team', 'Pick the theme and the date', 'Order the raffle prizes'],
+      week:  ['Send the final headcount to the caterer', 'Post the last-call reminder on social media', 'Confirm volunteers for each shift', 'Print the check-in sheets', 'Pick up the prizes'],
+      day:   ['Set up the check-in table', 'Brief volunteers before doors open', 'Run the raffle drawing', 'Take photos for the recap post', 'Count attendance at the door'],
+      after: ['Send thank-you notes to vendors', 'Update the tracking sheet with turnout', 'Hold a short debrief with the team', 'Post a recap with photos', 'Return borrowed equipment']
+    };
+
+    function makeRound() {
+      const cards = [];
+      BINS.forEach(b => {
+        shuffleArray(TASKS[b.id]).slice(0, 2).forEach((label, i) => {
+          cards.push({ id: b.id + i, label, answer: b.id });
+        });
+      });
+      return shuffleArray(cards);
+    }
+
+    initSortGame({ seconds: 90, makeRound, binRowClass: 'four', bins: BINS });
+  </script>
+
+</body>
+</html>

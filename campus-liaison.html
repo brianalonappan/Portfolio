@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Who Needs to Know — Briana Lonappan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <a class="back-link" href="campus-leadership.html">&larr; Back to Campus Leadership</a>
+
+  <!-- SCREEN 1: Intro -->
+  <div class="screen" id="entry" style="max-width: 640px;">
+    <h1>Who Needs to Know?</h1>
+    <p>A big part of my IHC role is acting as the link between the planning team, vendors, Dining, and the students who show up. The same news needs different words, and a different person to hear it.</p>
+    <p>Each round gives you eight messages. Send each one to the group it is for. (Every message below is invented for this demo.)</p>
+    <label class="timer-opt"><input type="checkbox" id="timer-off"> Play without a timer</label>
+    <button onclick="startRound()">Start</button>
+  </div>
+
+  <!-- SCREEN 2: Game -->
+  <div class="screen hidden" id="game" style="max-width: 760px;">
+    <h1>Send it to the right group</h1>
+
+    <div class="game-hud">
+      <div>Time left<strong id="timer">90</strong></div>
+      <div>Correct<strong id="score">0</strong></div>
+      <div>Placed<strong id="placed">0/8</strong></div>
+    </div>
+
+    <div class="card-pool" id="card-pool"></div>
+    <div class="bin-row" id="bin-row"></div>
+
+    <p style="color: #7a7266; font-size: 0.85rem; text-align: center;">Drag a card into a bin, or click a card then click a bin.</p>
+  </div>
+
+  <!-- SCREEN 3: Results -->
+  <div class="screen hidden" id="results" style="max-width: 640px;">
+    <h1>Messages delivered</h1>
+    <p id="final-score" style="text-align: center; font-size: 1.1rem; color: #1f2a44;"></p>
+    <div class="results-panel">
+      <p>The rule I work by: ask who has to act on this, and send it to them directly, in the words they need.</p>
+      <p class="why">Students need a time and a reason to come. Dining needs numbers. Vendors need a delivery time and a place. The planning team needs a name next to every job. One broadcast message to everyone does none of these well.</p>
+    </div>
+    <div style="margin-top: 16px;">
+      <button onclick="startRound()">Play Again</button>
+      <a href="campus-leadership.html"><button>Back to Campus Leadership</button></a>
+    </div>
+  </div>
+
+  <script src="sort-game.js"></script>
+  <script>
+    const BINS = [
+      { id: 'dining',   label: 'Dining' },
+      { id: 'vendors',  label: 'Vendors' },
+      { id: 'team',     label: 'Planning team' },
+      { id: 'students', label: 'Students' }
+    ];
+
+    // All invented. Two random messages per group each round.
+    const MESSAGES = {
+      dining: [
+        'Can we confirm how many buffet portions to expect?',
+        'Is the late-night serving window approved?',
+        'Who covers the cost of the food this time?',
+        'Can we get into the dining hall after it closes?'
+      ],
+      vendors: [
+        'The raffle prizes need to arrive by 8 pm.',
+        'The craft supplies order is missing glue sticks.',
+        'The photo booth needs power on the north wall.',
+        'Can the DJ start sound check at 7?'
+      ],
+      team: [
+        'Who is covering the check-in table at 9?',
+        'We need two more people to run the crafts station.',
+        'Can someone post the reminder tonight?',
+        'Who is tracking turnout this time?'
+      ],
+      students: [
+        'Doors open at 9 pm. Bring your student ID.',
+        'Trivia starts at 10 pm with giveaways.',
+        'Food is covered, so no dining dollars needed.',
+        'The craft station is open until midnight.'
+      ]
+    };
+
+    function makeRound() {
+      const cards = [];
+      BINS.forEach(b => {
+        shuffleArray(MESSAGES[b.id]).slice(0, 2).forEach((label, i) => {
+          cards.push({ id: b.id + i, label, answer: b.id, wide: true });
+        });
+      });
+      return shuffleArray(cards);
+    }
+
+    initSortGame({ seconds: 90, makeRound, binRowClass: 'four', bins: BINS });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Usability Lab — Briana Lonappan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <a class="back-link" href="projects-coursework.html">&larr; Back to Projects & Coursework</a>
+
+  <!-- SCREEN 1: Intro -->
+  <div class="screen" id="entry" style="max-width: 640px;">
+    <h1>Usability Lab</h1>
+    <p>In User-Centered UI/UX Design and in this project's own playtests, I sort what testers tell me by how much it hurts. Severe means the core flow breaks, or every tester hit it. Moderate means it slows people down. Low means polish.</p>
+    <p>Each round gives you six tester notes. Sort each one by severity. (Every note below is invented for this demo.)</p>
+    <label class="timer-opt"><input type="checkbox" id="timer-off"> Play without a timer</label>
+    <button onclick="startRound()">Start</button>
+  </div>
+
+  <!-- SCREEN 2: Game -->
+  <div class="screen hidden" id="game" style="max-width: 900px;">
+    <h1>How bad is it?</h1>
+
+    <div class="game-hud">
+      <div>Time left<strong id="timer">90</strong></div>
+      <div>Correct<strong id="score">0</strong></div>
+      <div>Placed<strong id="placed">0/6</strong></div>
+    </div>
+
+    <div class="card-pool" id="card-pool"></div>
+    <div class="bin-row" id="bin-row"></div>
+
+    <p style="color: #7a7266; font-size: 0.85rem; text-align: center;">Drag a card into a bin, or click a card then click a bin.</p>
+  </div>
+
+  <!-- SCREEN 3: Results -->
+  <div class="screen hidden" id="results" style="max-width: 640px;">
+    <h1>Feedback sorted</h1>
+    <p id="final-score" style="text-align: center; font-size: 1.1rem; color: #1f2a44;"></p>
+    <div class="results-panel">
+      <p>The rule I work by: fix what breaks the core flow first, then what slows people down, and treat polish as the last pass.</p>
+      <p class="why">Sorting before fixing keeps a loud small request, like a color change, from jumping ahead of a quiet problem that stops people from finishing.</p>
+    </div>
+    <div style="margin-top: 16px;">
+      <button onclick="startRound()">Play Again</button>
+      <a href="projects-coursework.html"><button>Back to Projects & Coursework</button></a>
+    </div>
+  </div>
+
+  <script src="sort-game.js"></script>
+  <script>
+    const BINS = [
+      { id: 'severe',   label: 'Severe' },
+      { id: 'moderate', label: 'Moderate' },
+      { id: 'low',      label: 'Low' }
+    ];
+
+    // All invented.
+    const NOTES = {
+      severe: [
+        'Nobody could find the way back out of the first game.',
+        'The Start button did nothing on a phone.',
+        'Every tester got stuck on the first screen.'
+      ],
+      moderate: [
+        'The instructions took two reads to understand.',
+        'The timer felt rushed.',
+        'Testers were not sure when they were finished.',
+        'Two testers could not tell what the score meant.'
+      ],
+      low: [
+        'One tester wanted brighter colors.',
+        'One tester asked for background music.',
+        'One tester liked a different font.',
+        'One tester wanted a cuter ball.'
+      ]
+    };
+
+    function makeRound() {
+      const cards = [];
+      BINS.forEach(b => {
+        shuffleArray(NOTES[b.id]).slice(0, 2).forEach((label, i) => {
+          cards.push({ id: b.id + i, label, answer: b.id, wide: true });
+        });
+      });
+      return shuffleArray(cards);
+    }
+
+    initSortGame({ seconds: 90, makeRound, binRowClass: 'three', bins: BINS });
+  </script>
+
+</body>
+</html>

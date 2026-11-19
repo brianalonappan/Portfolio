@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scope Call — Briana Lonappan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <a class="back-link" href="projects-coursework.html">&larr; Back to Projects & Coursework</a>
+
+  <!-- SCREEN 1: Intro -->
+  <div class="screen" id="entry" style="max-width: 640px;">
+    <h1>Build It or Cut It</h1>
+    <p>On Chop, Cook, Serve! our team of three had six weeks. The rule that saved the project: build one cooking mechanic really well, and cut anything that needs a brand-new one.</p>
+    <p>Each round gives you six feature ideas for a small cooking game. Decide which to build and which to cut. (These ideas are for practice. They are not a list of what shipped.)</p>
+    <label class="timer-opt"><input type="checkbox" id="timer-off"> Play without a timer</label>
+    <button onclick="startRound()">Start</button>
+  </div>
+
+  <!-- SCREEN 2: Game -->
+  <div class="screen hidden" id="game" style="max-width: 700px;">
+    <h1>What fits in six weeks?</h1>
+
+    <div class="game-hud">
+      <div>Time left<strong id="timer">90</strong></div>
+      <div>Correct<strong id="score">0</strong></div>
+      <div>Placed<strong id="placed">0/6</strong></div>
+    </div>
+
+    <div class="card-pool" id="card-pool"></div>
+    <div class="bin-row" id="bin-row"></div>
+
+    <p style="color: #7a7266; font-size: 0.85rem; text-align: center;">Drag a card into a bin, or click a card then click a bin.</p>
+  </div>
+
+  <!-- SCREEN 3: Results -->
+  <div class="screen hidden" id="results" style="max-width: 640px;">
+    <h1>Scope locked</h1>
+    <p id="final-score" style="text-align: center; font-size: 1.1rem; color: #1f2a44;"></p>
+    <div class="results-panel">
+      <p>The rule I work by: when time and team size are fixed, reuse what already works. A new variant of the same mechanic is cheap. A new mechanic is a whole new project.</p>
+      <p class="why">Depth over breadth: one well-built mechanic beats three rushed ones, especially under a hard team-size and time constraint.</p>
+    </div>
+    <div style="margin-top: 16px;">
+      <button onclick="startRound()">Play Again</button>
+      <a href="projects-coursework.html"><button>Back to Projects & Coursework</button></a>
+    </div>
+  </div>
+
+  <script src="sort-game.js"></script>
+  <script>
+    const BINS = [
+      { id: 'build', label: 'Build it' },
+      { id: 'cut',   label: 'Cut it' }
+    ];
+
+    const BUILD = [
+      { label: 'A cheese pizza variant', sub: 'Uses the same cooking steps' },
+      { label: 'A pepperoni pizza variant', sub: 'Uses the same cooking steps' },
+      { label: 'A new topping choice', sub: 'Reuses the pizza mechanic' },
+      { label: 'A second customer order', sub: 'Reuses the same timer' },
+      { label: 'A score and tip screen', sub: 'Small, and every order uses it' }
+    ];
+    const CUT = [
+      { label: 'A salad station', sub: 'Needs its own chopping mechanic' },
+      { label: 'A beverage station', sub: 'Needs its own timing mechanic' },
+      { label: 'A dessert menu', sub: 'Needs a brand-new mechanic' },
+      { label: 'A farming minigame', sub: 'A whole separate system' },
+      { label: 'A mixing minigame', sub: 'Needs its own mechanic' }
+    ];
+
+    function makeRound() {
+      const cards = [];
+      shuffleArray(BUILD).slice(0, 3).forEach((c, i) => cards.push({ id: 'b' + i, label: c.label, sub: c.sub, answer: 'build' }));
+      shuffleArray(CUT).slice(0, 3).forEach((c, i) => cards.push({ id: 'c' + i, label: c.label, sub: c.sub, answer: 'cut' }));
+      return shuffleArray(cards);
+    }
+
+    initSortGame({ seconds: 90, makeRound, bins: BINS });
+  </script>
+
+</body>
+</html>
